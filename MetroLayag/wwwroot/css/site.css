@@ -1,0 +1,50 @@
+﻿html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #a36dfd;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    font-family: 'Inter', sans-serif;
+}
+
+.navbar-purple {
+    background: linear-gradient(90deg, #4e048d, #6e46f4);
+    color: white;
+}
+
+    .navbar-purple .navbar-brand,
+    .navbar-purple .nav-link,
+    .navbar-purple .nav-item {
+        color: white !important;
+    }
+
+        .navbar-purple .nav-link:hover {
+            color: #e0d6ff !important;
+        }
+
+a {
+    text-decoration: none;
+}
+
+.card {
+    margin-bottom: 1.5rem;
+}

@@ -1,0 +1,129 @@
+﻿@page
+@model MetroLayag.Pages.DisembarkingModel
+@{
+    ViewData["Title"] = "Disembarking";
+}
+
+<div class="container mt-4">
+    <h1 class="mt-4 p-3 text-white" style="background-color: #4e048d; border-radius: 10px;">
+        <img src="~/appdevAssets/Disembark_Icon.png" alt="Logo" width="50" height="50" class="me-2" />
+        Disembark Passenger
+    </h1>
+
+    <form method="get" class="row g-3 mb-3">
+        <div class="col-md-5">
+            <input type="text" name="SearchTerm" class="form-control" placeholder="Search by name or destination" value="@Model.SearchTerm" />
+        </div>
+        <div class="col-md-4">
+            <input type="date" name="FilterDate" class="form-control" value="@Model.FilterDate?.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-outline-primary w-100">Filter</button>
+        </div>
+    </form>
+
+    @if (Model.PassengerList.Any())
+    {
+        <div style="overflow-y: auto; max-height: 100%;">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Starting Station</th>
+                    <th>Destination</th>
+                    <th>Booking Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            @{
+               var activeCount = 0;
+               foreach (var p in Model.PassengerList)
+                {
+                    <tr>
+                        <td>@p.FullName</td>
+                        <td>@p.StartingStation</td>
+                        <td>@p.Destination</td>
+                        <td>@p.BookingDate.ToString("MMM dd, yyyy")</td>
+                        <td>
+                            <form method="post" asp-page-handler="MarkDisembarked" asp-route-id="@p.Id">
+                                <button type="submit" class="btn btn-success btn-sm">Mark as Disembarked</button>
+                            </form>
+                        </td>
+                    </tr>
+                            activeCount++;
+                        }
+
+                        for (int i = activeCount; i < 10; i++)
+                        {
+                            <tr>
+                                <td colspan="5" style="height: 40px;"></td>
+                            </tr>
+                        }
+                    }
+            </tbody>
+        </table>
+        </div>
+    }
+    else
+    {
+        <p>No active passengers found for disembarking.</p>
+    }
+
+    <hr />
+    <h3>Disembarked History</h3>
+    <form method="get" class="row g-3 mb-3">
+        <div class="col-md-5">
+            <input type="text" name="SearchTerm" class="form-control" placeholder="Search by name or destination" value="@Model.SearchTerm" />
+        </div>
+        <div class="col-md-4">
+            <input type="date" name="FilterDate" class="form-control" value="@Model.FilterDate?.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-outline-success w-100">Filter</button>
+        </div>
+    </form>
+
+    @if (Model.DisembarkedList.Any())
+    {
+        <div style="overflow-y: auto; max-height: 100%;">
+        <table class="table table-bordered table-sm">
+            <thead class="table-success">
+                <tr>
+                    <th>Name</th>
+                    <th>Starting Station</th>
+                    <th>Destination</th>
+                    <th>Booking Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                    @{
+                        var disembarkedCount = 0;
+                        foreach (var p in Model.DisembarkedList)
+                        {
+                    <tr class="table-success">
+                        <td>@p.FullName</td>
+                        <td>@p.StartingStation</td>
+                        <td>@p.Destination</td>
+                        <td>@p.BookingDate.ToString("MMM dd, yyyy")</td>
+                        <td>Disembarked</td>
+                    </tr>
+                }
+
+                        for (int i = disembarkedCount; i < 10; i++)
+                        {
+                            <tr class="table-success">
+                                <td colspan="5" style="height: 40px;"></td>
+                            </tr>
+                        }
+                    }
+            </tbody>
+        </table>
+        </div>
+    }
+    else
+    {
+        <p>No passengers have disembarked yet.</p>
+    }
+</div>

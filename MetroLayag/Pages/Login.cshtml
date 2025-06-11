@@ -1,0 +1,62 @@
+﻿@page
+@model MetroLayag.Pages.LoginModel
+@{
+    Layout = null;
+}
+
+<!-- Bootstrap and Google Fonts -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="~/css/login.css" /> <!-- Link to external CSS -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>MetroLayag</title>
+    <link rel="icon" type="image/png" href="appdevAssets/Logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/css/login.css" />
+</head>
+<body>
+    <div class="login-container">
+        <!-- Left Side with Video -->
+        <div class="left-side">
+            <video autoplay muted loop>
+                <source src="appdevAssets/metro_landing.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+            </video>
+            <div class="left-overlay">
+                <div>
+                    <div class="d-flex align-items-center gap-2">
+                        <img src="~/appdevAssets/Logo.png" alt="MetroLayag Logo" class="metro-logo" />
+                        <span class="metro-text">MetroLayag</span>
+                    </div>
+                    <div class="description mt-5 fs-5">
+                        MetroLayag is a booking application for the Pasig River Ferry Service, designed to automate station operations and optimize passenger management for a more efficient and organized ferry experience for commuters.
+                    </div>
+                </div>
+                <a asp-page="/LandingPage" class="exit-btn mt-3 text-decoration-none">Exit</a>
+            </div>
+        </div>
+
+        <!-- Right Side with Login Form -->
+        <div class="right-side">
+            <div class="login-box">
+                <h2>MetroLayag Admin Login</h2>
+                <form method="post">
+                    <div class="mb-3">
+                        <label asp-for="Username" class="form-label">Username</label>
+                        <input asp-for="Username" class="form-control" placeholder="Enter username" />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label">Password</label>
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Enter password" />
+                    </div>
+                    <button type="submit" class="login-btn">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

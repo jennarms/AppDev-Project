@@ -1,0 +1,113 @@
+﻿@page
+@model MetroLayag.Pages.LandingPageModel
+@{
+	ViewData["Title"] = "Landing Page";
+}
+@{
+    Layout = null; // Disable the layout file
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>MetroLayag</title>
+    <link rel="icon" type="image/png" href="appdevAssets/Logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+    body, html {
+        height: 100%;
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .video-bg {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        transform: translate(-50%, -50%);
+        z-index: -1;
+        object-fit: cover;
+    }
+
+
+    .landing-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: white;
+    }
+
+    .branding {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+    }
+
+        .branding img {
+            width: 400px;
+            height: auto;
+        }
+
+    .branding-text h1 {
+        margin: 0;
+        font-size: 4.5rem;
+        color: white;
+        text-shadow: 0 0 3px #000, 0 0 5px #000, 1px 1px 2px #000;
+        padding-left: 3rem;
+    }
+
+    .branding-text p {
+        margin: 0;
+        font-size: 1.5rem;
+        color: white;
+        text-shadow: 0 0 2px #000, 1px 1px 1px #000;
+        padding-right: 6rem;
+    }
+
+
+    .get-started {
+        margin-top: 1.5rem;
+        padding: 0.7rem 2rem;
+        background-color: #0078D4;
+        border: none;
+        color: white;
+        font-size: 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 50%;
+    }
+
+        .get-started:hover {
+            background-color: #301934;
+            transform: scale(1.05);
+            transition: all 0.3s ease;
+        }
+</style>
+</head>
+<body>
+<video autoplay muted loop class="video-bg">
+    <source src="appdevAssets/metro_landing.mp4" type="video/mp4">
+</video>
+
+<div class="landing-content">
+    <div class="branding">
+        <img src="appdevAssets/logo.png" alt="Logo" />
+        <div class="branding-text">
+            <h1>MetroLayag</h1>
+            <p>Pasig River Ferry Service</p>
+        </div>
+    </div>
+
+    <button class="get-started" onclick="window.location.href='Login';">
+        Get Started
+    </button>
+
+</div>
+</body>
+</html>

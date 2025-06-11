@@ -1,0 +1,205 @@
+﻿@page
+@model MetroLayag.Pages.BookingModel
+@{
+    ViewData["Title"] = "Booking";
+}
+
+
+<div class="container mt-4">
+    <h1 class="mb-4 p-3 text-white" style="background-color: #4e048d; border-radius: 10px;">
+        <img src="~/appdevAssets/Booking_Icon.png" alt="Logo" width="50" height="50" class="me-2" />
+        Passenger Booking
+    </h1>
+
+    <!-- Booking Form -->
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="mb-3">
+            <label asp-for="Passenger.FullName" class="form-label"></label>
+            <input asp-for="Passenger.FullName" class="form-control" />
+            <span asp-validation-for="Passenger.FullName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Passenger.Gender" class="form-label"></label>
+            <select asp-for="Passenger.Gender" class="form-select">
+                <option>Male</option>
+                <option>Female</option>
+            </select>
+            <span asp-validation-for="Passenger.Gender" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Passenger.Age" class="form-label"></label>
+            <input asp-for="Passenger.Age" class="form-control" />
+            <span asp-validation-for="Passenger.Age" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Passenger.StartingStation" class="form-label"></label>
+            <select asp-for="Passenger.StartingStation" class="form-select">
+                <option>Escolta</option>
+                <option>Lawton</option>
+                <option>Quinta</option>
+                <option>PUP</option>
+                <option>Sta. Ana</option>
+                <option>Lambingan</option>
+                <option>Valenzuela</option>
+                <option>Hulo</option>
+                <option>Guadalupe</option>
+                <option>Maybunga</option>
+                <option>San Joaquin</option>
+                <option>Kalawaan</option>
+                <option>Pinagbuhatan</option>
+            </select>
+            <span asp-validation-for="Passenger.StartingStation" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Passenger.Destination" class="form-label"></label>
+            <select asp-for="Passenger.Destination" class="form-select">
+                <option>Escolta</option>
+                <option>Lawton</option>
+                <option>Quinta</option>
+                <option>PUP</option>
+                <option>Sta. Ana</option>
+                <option>Lambingan</option>
+                <option>Valenzuela</option>
+                <option>Hulo</option>
+                <option>Guadalupe</option>
+                <option>Maybunga</option>
+                <option>San Joaquin</option>
+                <option>Kalawaan</option>
+                <option>Pinagbuhatan</option>
+            </select>
+            <span asp-validation-for="Passenger.Destination" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn" style="background-color: #4e048d; color: white;">Add Passenger</button>
+    </form>
+
+    <!-- Active Bookings Section -->
+    <h3 class="mt-5">Active / Booked Passengers</h3>
+    <form method="get" class="row g-3 mb-3">
+        <div class="col-md-5">
+            <input type="text" name="SearchTermBooked" class="form-control" placeholder="Search name or destination" value="@Model.SearchTermBooked" />
+        </div>
+        <div class="col-md-4">
+            <input type="date" name="FilterDateBooked" class="form-control" value="@Model.FilterDateBooked?.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-outline-primary w-100">Filter</button>
+        </div>
+    </form>
+    <div style="max-height: 100%; overflow-y: auto;">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Age</th>
+                <th>Starting Station</th>
+                <th>Destination</th>
+                <th>Booking Date</th>
+                <th>Disembarked?</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var countBooked = 0;
+                foreach (var p in Model.PassengerList)
+                {
+
+                <tr>
+                    <td>@p.FullName</td>
+                    <td>@p.Gender</td>
+                    <td>@p.Age</td>
+                    <td>@p.StartingStation</td>
+                    <td>@p.Destination</td>
+                    <td>@p.BookingDate.ToString("MMM dd, yyyy")</td>
+                    <td>@(p.HasDisembarked ? "Yes" : "No")</td>
+                    <td>
+                        <a asp-page="/EditPassenger" asp-route-id="@p.Id" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-page="/CancelPassenger" asp-route-id="@p.Id" class="btn btn-sm btn-danger" onclick="return confirm('Mark this passenger as canceled?')">Cancel</a>
+                    </td>
+                </tr>
+                        countBooked++;
+                    }
+                    for (int i = countBooked; i < 10; i++)
+                    {
+                        <tr>
+                            <td colspan="8" style="height: 40px;"></td>
+                        </tr>
+                    }
+                }
+        </tbody>
+    </table>
+    </div>
+
+    <!-- Canceled Passengers -->
+    <h3 class="mt-5">Canceled Passengers</h3>
+    <form method="get" class="row g-3 mb-3">
+        <div class="col-md-5">
+            <input type="text" name="SearchTermCanceled" class="form-control" placeholder="Search name or destination" value="@Model.SearchTermCanceled" />
+        </div>
+        <div class="col-md-4">
+            <input type="date" name="FilterDateCanceled" class="form-control" value="@Model.FilterDateCanceled?.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-outline-danger w-100">Filter</button>
+        </div>
+    </form>
+
+    @if (Model.CanceledList.Any())
+    {
+        <div style="max-height: 100%; overflow-y: auto;">
+        <table class="table table-bordered table-sm">
+            <thead class="table-danger">
+                <tr>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Age</th>
+                    <th>Starting Station</th>
+                    <th>Destination</th>
+                    <th>Booking Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var countCanceled = 0;
+                    foreach (var p in Model.CanceledList)
+                  {
+                    <tr class="table-danger">
+                        <td>@p.FullName</td>
+                        <td>@p.Gender</td>
+                        <td>@p.Age</td>
+                        <td>@p.StartingStation</td>
+                        <td>@p.Destination</td>
+                        <td>@p.BookingDate.ToString("MMM dd, yyyy")</td>
+                        <td>Canceled</td>
+                    </tr>
+                            countCanceled++;
+                        }
+                        for (int i = countCanceled; i < 10; i++)
+                        {
+                            <tr class="table-danger">
+                                <td colspan="7" style="height: 40px;"></td>
+                            </tr>
+                        }
+                    }
+            </tbody>
+        </table>
+        </div>
+    }
+    else
+    {
+        <p>No canceled passengers.</p>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

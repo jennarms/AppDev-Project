@@ -1,0 +1,102 @@
+﻿@page
+@model MetroLayag.Pages.PassengerReportModel
+@{
+    ViewData["Title"] = "Passenger Reports";
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    <h1 class="mt-4 p-3 text-white" style="background-color: #4e048d; border-radius: 10px;">
+        <img src="~/appdevAssets/Passengers_Icon.png" alt="Logo" width="50" height="50" class="me-2" />
+        Passenger Reports
+    </h1>
+
+    <!-- Toggle Buttons -->
+    <div class="btn-group my-4" role="group" aria-label="Toggle Report Views">
+        <button type="button" class="btn btn-outline-success" onclick="showSection('successful')">View Successful Trips</button>
+        <button type="button" class="btn btn-outline-danger" onclick="showSection('canceled')">View Canceled Passengers</button>
+    </div>
+
+    <!-- Successful Trips Section -->
+    <div id="successful-section">
+        <h4 class="text-success">Successful Trips</h4>
+        @if (Model.SuccessfulPassengers.Any())
+        {
+            <table class="table table-bordered table-striped mt-3">
+                <thead class="table-success">
+                    <tr>
+                        <th>Name</th>
+                        <th>Gender</th>
+                        <th>Age</th>
+                        <th>Starting Station</th>
+                        <th>Destination</th>
+                        <th>Booking Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model.SuccessfulPassengers)
+                    {
+                        <tr>
+                            <td>@p.FullName</td>
+                            <td>@p.Gender</td>
+                            <td>@p.Age</td>
+                            <td>@p.StartingStation</td>
+                            <td>@p.Destination</td>
+                            <td>@p.BookingDate.ToString("MMM dd, yyyy")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No passengers have completed their trip yet.</p>
+        }
+    </div>
+
+    <!-- Canceled Passengers Section -->
+    <div id="canceled-section" style="display: none;">
+        <h4 class="text-danger">Canceled Passengers</h4>
+        @if (Model.CanceledPassengers.Any())
+        {
+            <table class="table table-bordered table-striped mt-3">
+                <thead class="table-danger">
+                    <tr>
+                        <th>Name</th>
+                        <th>Gender</th>
+                        <th>Age</th>
+                        <th>Starting Station</th>
+                        <th>Destination</th>
+                        <th>Booking Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model.CanceledPassengers)
+                    {
+                        <tr>
+                            <td>@p.FullName</td>
+                            <td>@p.Gender</td>
+                            <td>@p.Age</td>
+                            <td>@p.StartingStation</td>
+                            <td>@p.Destination</td>
+                            <td>@p.BookingDate.ToString("MMM dd, yyyy")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No canceled passengers.</p>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function showSection(section) {
+            document.getElementById('successful-section').style.display = section === 'successful' ? 'block' : 'none';
+            document.getElementById('canceled-section').style.display = section === 'canceled' ? 'block' : 'none';
+        }
+    </script>
+}

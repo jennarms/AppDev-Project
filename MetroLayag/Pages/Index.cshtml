@@ -1,0 +1,126 @@
+﻿@page
+@model MetroLayag.Pages.IndexModel
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "_Layout";
+}
+
+<style>
+    body {
+        min-height: 100vh;
+    }
+
+    .dashboard-card {
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .card-stat {
+        font-size: 3rem;
+        font-weight: bold;
+    }
+
+    .card-header {
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    .card-body p {
+        margin-bottom: 0.75rem;
+    }
+
+    .purple-header {
+        background: #6a11cb;
+        color: white;
+    }
+
+    .action-tile {
+        text-align: center;
+        padding: 1.5rem;
+        background-color: #6a11cb;
+        border-radius: 1rem;
+        transition: transform 0.2s ease;
+        height: 100%;
+        color: white;
+        text-decoration: none;
+    }
+
+        .action-tile:hover {
+            transform: scale(1.03);
+            text-decoration: none;
+            color: white;
+        }
+
+        .action-tile img {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 1rem;
+        }
+
+    .action-caption {
+        font-weight: 500;
+        font-size: 1rem;
+    }
+</style>
+
+<div class="container my-5">
+    <div class="text-center mb-5">
+        <h1>MetroLayag Admin Dashboard</h1>
+        <p>Manage ferry bookings and passenger tracking efficiently.</p>
+        <hr class="bg-black" />
+    </div>
+
+    <div class="row g-4">
+        <!-- Total Booked -->
+        <div class="col-md-4">
+            <div class="card dashboard-card bg-white text-dark text-center p-3">
+                <div class="card-header text-white rounded-top purple-header">Total Booked</div>
+                <div class="card-body">
+                    <div class="card-stat">@Model.TotalBooked</div>
+                    <p>Currently active bookings</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Disembarked -->
+        <div class="col-md-4">
+            <div class="card dashboard-card bg-white text-dark text-center p-3">
+                <div class="card-header bg-success text-white rounded-top">Total Disembarked</div>
+                <div class="card-body">
+                    <div class="card-stat">@Model.TotalDisembarked</div>
+                    <p>Passengers who completed their trip</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Canceled -->
+        <div class="col-md-4">
+            <div class="card dashboard-card bg-white text-dark text-center p-3">
+                <div class="card-header bg-danger text-white rounded-top">Total Canceled</div>
+                <div class="card-body">
+                    <div class="card-stat">@Model.TotalCanceled</div>
+                    <p>Passengers who canceled their booking</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-5" />
+
+    <!-- Action Buttons -->
+    <div class="row g-4 justify-content-center">
+        <div class="col-md-4 col-sm-6">
+            <a href="/Booking" class="action-tile d-block">
+                <img src="~/appdevAssets/Booking_Icon.png" alt="Booking Icon" />
+                <div class="action-caption">To Book a Passenger</div>
+            </a>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <a href="/Disembarking" class="action-tile d-block">
+                <img src="~/appdevAssets/Disembark_Icon.png" alt="Disembark Icon" />
+                <div class="action-caption">To Disembark a Passenger</div>
+            </a>
+        </div>
+    </div>
+</div>
