@@ -1,5 +1,7 @@
 ﻿@page
 @model MetroLayag.Pages.DisembarkingModel
+@using X.PagedList.Mvc.Core
+@using X.PagedList
 @{
     ViewData["Title"] = "Disembarking";
 }
@@ -24,7 +26,6 @@
 
     @if (Model.PassengerList.Any())
     {
-        <div style="overflow-y: auto; max-height: 100%;">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -36,9 +37,7 @@
                 </tr>
             </thead>
             <tbody>
-            @{
-               var activeCount = 0;
-               foreach (var p in Model.PassengerList)
+                @foreach (var p in Model.PassengerList)
                 {
                     <tr>
                         <td>@p.FullName</td>
@@ -51,19 +50,10 @@
                             </form>
                         </td>
                     </tr>
-                            activeCount++;
-                        }
-
-                        for (int i = activeCount; i < 10; i++)
-                        {
-                            <tr>
-                                <td colspan="5" style="height: 40px;"></td>
-                            </tr>
-                        }
-                    }
+                }
             </tbody>
         </table>
-        </div>
+        @Html.PagedListPager(Model.PassengerList, page => Url.Page("/Disembarking", new { ActivePage = page, DisembarkedPage = Model.DisembarkedPage, SearchTerm = Model.SearchTerm, FilterDate = Model.FilterDate?.ToString("yyyy-MM-dd") }), new PagedListRenderOptions { Display = PagedListDisplayMode.IfNeeded })
     }
     else
     {
@@ -86,7 +76,6 @@
 
     @if (Model.DisembarkedList.Any())
     {
-        <div style="overflow-y: auto; max-height: 100%;">
         <table class="table table-bordered table-sm">
             <thead class="table-success">
                 <tr>
@@ -98,10 +87,8 @@
                 </tr>
             </thead>
             <tbody>
-                    @{
-                        var disembarkedCount = 0;
-                        foreach (var p in Model.DisembarkedList)
-                        {
+                @foreach (var p in Model.DisembarkedList)
+                {
                     <tr class="table-success">
                         <td>@p.FullName</td>
                         <td>@p.StartingStation</td>
@@ -110,17 +97,9 @@
                         <td>Disembarked</td>
                     </tr>
                 }
-
-                        for (int i = disembarkedCount; i < 10; i++)
-                        {
-                            <tr class="table-success">
-                                <td colspan="5" style="height: 40px;"></td>
-                            </tr>
-                        }
-                    }
             </tbody>
         </table>
-        </div>
+        @Html.PagedListPager(Model.DisembarkedList, page => Url.Page("/Disembarking", new { DisembarkedPage = page, ActivePage = Model.ActivePage, SearchTerm = Model.SearchTerm, FilterDate = Model.FilterDate?.ToString("yyyy-MM-dd") }), new PagedListRenderOptions { Display = PagedListDisplayMode.IfNeeded })
     }
     else
     {

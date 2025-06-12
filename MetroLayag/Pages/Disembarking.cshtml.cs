@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using MetroLayag.Data;
 using MetroLayag.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using X.PagedList;
+using X.PagedList.Extensions;
 
 namespace MetroLayag.Pages
 {
@@ -19,8 +20,8 @@ namespace MetroLayag.Pages
             _context = context;
         }
 
-        public List<Passenger> PassengerList { get; set; }
-        public List<Passenger> DisembarkedList { get; set; }
+        public IPagedList<Passenger> PassengerList { get; set; }
+        public IPagedList<Passenger> DisembarkedList { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public string SearchTerm { get; set; }
@@ -28,17 +29,26 @@ namespace MetroLayag.Pages
         [BindProperty(SupportsGet = true)]
         public DateTime? FilterDate { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public int ActivePage { get; set; } = 1;
+
+        [BindProperty(SupportsGet = true)]
+        public int DisembarkedPage { get; set; } = 1;
+
+        private const int PageSize = 10;
+
         public IActionResult OnGet()
         {
             if (HttpContext.Session.GetString("IsLoggedIn") != "true")
                 return RedirectToPage("/Login");
 
-            var query = _context.Passengers
+            // Active passengers
+            var activeQuery = _context.Passengers
                 .Where(p => !p.HasDisembarked && !p.IsCanceled);
 
             if (!string.IsNullOrWhiteSpace(SearchTerm))
             {
-                query = query.Where(p =>
+                activeQuery = activeQuery.Where(p =>
                     p.FullName.Contains(SearchTerm) ||
                     p.Destination.Contains(SearchTerm));
             }
@@ -46,11 +56,14 @@ namespace MetroLayag.Pages
             if (FilterDate.HasValue)
             {
                 var date = FilterDate.Value.Date;
-                query = query.Where(p => p.BookingDate.Date == date);
+                activeQuery = activeQuery.Where(p => p.BookingDate.Date == date);
             }
 
-            PassengerList = query.OrderByDescending(p => p.BookingDate).ToList();
+            PassengerList = activeQuery
+                .OrderByDescending(p => p.BookingDate)
+                .ToPagedList(ActivePage, PageSize);
 
+            // Disembarked passengers
             var disembarkedQuery = _context.Passengers
                 .Where(p => p.HasDisembarked && !p.IsCanceled);
 
@@ -60,7 +73,16 @@ namespace MetroLayag.Pages
                 disembarkedQuery = disembarkedQuery.Where(p => p.BookingDate.Date == date);
             }
 
-            DisembarkedList = disembarkedQuery.OrderByDescending(p => p.BookingDate).ToList();
+            if (!string.IsNullOrWhiteSpace(SearchTerm))
+            {
+                disembarkedQuery = disembarkedQuery.Where(p =>
+                    p.FullName.Contains(SearchTerm) ||
+                    p.Destination.Contains(SearchTerm));
+            }
+
+            DisembarkedList = disembarkedQuery
+                .OrderByDescending(p => p.BookingDate)
+                .ToPagedList(DisembarkedPage, PageSize);
 
             return Page();
         }
