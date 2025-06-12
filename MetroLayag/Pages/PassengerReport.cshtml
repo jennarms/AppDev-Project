@@ -54,7 +54,7 @@
     <!-- Successful Trips Section -->
     <div id="successful-section">
         <h4 class="text-success">Successful Trips</h4>
-        @if (Model.SuccessfulPassengers.Any())
+        @if (Model.PagedSuccessfulPassengers.Any())
         {
             <table class="table table-bordered table-striped mt-3">
                 <thead class="table-success">
@@ -68,7 +68,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var p in Model.SuccessfulPassengers)
+                    @foreach (var p in Model.PagedSuccessfulPassengers)
                     {
                         <tr>
                             <td>@p.FullName</td>
@@ -81,6 +81,15 @@
                     }
                 </tbody>
             </table>
+            <div>
+                @Html.PagedListPager(Model.PagedSuccessfulPassengers, page => Url.Page("PassengerReport", new
+                    {
+                        PageSuccessful = page,
+                        PageCanceled = Model.PageCanceled,
+                        FilterDate = Model.FilterDate?.ToString("yyyy-MM-dd"),
+                        SelectedStation = Model.SelectedStation
+                    }))
+            </div>
         }
         else
         {
@@ -91,7 +100,7 @@
     <!-- Canceled Passengers Section -->
     <div id="canceled-section" style="display: none;">
         <h4 class="text-danger">Canceled Passengers</h4>
-        @if (Model.CanceledPassengers.Any())
+        @if (Model.PagedCanceledPassengers.Any())
         {
             <table class="table table-bordered table-striped mt-3">
                 <thead class="table-danger">
@@ -105,7 +114,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var p in Model.CanceledPassengers)
+                    @foreach (var p in Model.PagedCanceledPassengers)
                     {
                         <tr>
                             <td>@p.FullName</td>
@@ -118,7 +127,17 @@
                     }
                 </tbody>
             </table>
+            <div>
+                @Html.PagedListPager(Model.PagedCanceledPassengers, page => Url.Page("PassengerReport", new
+                    {
+                        PageCanceled = page,
+                        PageSuccessful = Model.PageSuccessful,
+                        FilterDate = Model.FilterDate?.ToString("yyyy-MM-dd"),
+                        SelectedStation = Model.SelectedStation
+                    }))
+            </div>
         }
+
         else
         {
             <p>No canceled passengers.</p>

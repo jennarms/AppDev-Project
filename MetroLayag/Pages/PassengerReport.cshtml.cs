@@ -2,11 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MetroLayag.Models;
 using MetroLayag.Data;
+using X.PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using X.PagedList;
-
+using X.PagedList.Extensions;
 
 namespace MetroLayag.Pages
 {
@@ -25,14 +25,20 @@ namespace MetroLayag.Pages
         [BindProperty(SupportsGet = true)]
         public string SelectedStation { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public int PageSuccessful { get; set; } = 1;
+
+        [BindProperty(SupportsGet = true)]
+        public int PageCanceled { get; set; } = 1;
+
         public List<string> Stations { get; set; } = new()
         {
             "Escolta", "Lawton", "Quinta", "PUP", "Sta. Ana", "Lambingan", "Valenzuela",
             "Hulo", "Guadalupe", "Maybunga", "San Joaquin", "Kalawaan", "Pinagbuhatan"
         };
 
-        public List<Passenger> SuccessfulPassengers { get; set; } = new();
-        public List<Passenger> CanceledPassengers { get; set; } = new();
+        public IPagedList<Passenger> PagedSuccessfulPassengers { get; set; }
+        public IPagedList<Passenger> PagedCanceledPassengers { get; set; }
 
         public void OnGet()
         {
@@ -50,13 +56,15 @@ namespace MetroLayag.Pages
                     p.StartingStation == SelectedStation || p.Destination == SelectedStation);
             }
 
-            SuccessfulPassengers = passengers
+            PagedSuccessfulPassengers = passengers
                 .Where(p => p.HasDisembarked && !p.IsCanceled)
-                .ToList();
+                .OrderByDescending(p => p.BookingDate)
+                .ToPagedList(PageSuccessful, 10);
 
-            CanceledPassengers = passengers
+            PagedCanceledPassengers = passengers
                 .Where(p => p.IsCanceled)
-                .ToList();
+                .OrderByDescending(p => p.BookingDate)
+                .ToPagedList(PageCanceled, 10);
         }
     }
 }

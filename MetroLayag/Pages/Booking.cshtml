@@ -16,13 +16,13 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
         <div class="mb-3">
-            <label asp-for="Passenger.FullName" class="form-label"></label>
+            <label asp-for="Passenger.FullName" class="form-label">Full Name</label>
             <input asp-for="Passenger.FullName" class="form-control" />
             <span asp-validation-for="Passenger.FullName" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="Passenger.Gender" class="form-label"></label>
+            <label asp-for="Passenger.Gender" class="form-label">Gender</label>
             <select asp-for="Passenger.Gender" class="form-select">
                 <option>Male</option>
                 <option>Female</option>
@@ -31,13 +31,13 @@
         </div>
 
         <div class="mb-3">
-            <label asp-for="Passenger.Age" class="form-label"></label>
+            <label asp-for="Passenger.Age" class="form-label">Age</label>
             <input asp-for="Passenger.Age" class="form-control" />
             <span asp-validation-for="Passenger.Age" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="Passenger.StartingStation" class="form-label"></label>
+            <label asp-for="Passenger.StartingStation" class="form-label">Starting Station</label>
             <select asp-for="Passenger.StartingStation" class="form-select">
                 <option>Escolta</option>
                 <option>Lawton</option>
@@ -57,7 +57,7 @@
         </div>
 
         <div class="mb-3">
-            <label asp-for="Passenger.Destination" class="form-label"></label>
+            <label asp-for="Passenger.Destination" class="form-label">Destination</label>
             <select asp-for="Passenger.Destination" class="form-select">
                 <option>Escolta</option>
                 <option>Lawton</option>
