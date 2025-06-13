@@ -136,6 +136,24 @@
         </table>
     </div>
 
+    <div class="d-flex justify-content-center">
+        @Html.PagedListPager(Model.PassengerList, page => Url.Page("Booking", null, new
+            {
+                BookedPage = page,
+                SearchTermBooked = Model.SearchTermBooked,
+                FilterDateBooked = Model.FilterDateBooked?.ToString("yyyy-MM-dd"),
+                SearchTermCanceled = Model.SearchTermCanceled,
+                FilterDateCanceled = Model.FilterDateCanceled?.ToString("yyyy-MM-dd"),
+                CanceledPage = Model.CanceledPage
+            }, null), new PagedListRenderOptions
+   {
+       UlElementClasses = new[] { "pagination" },
+       LiElementClasses = new[] { "page-item" },
+       PageClasses = new[] { "page-link" }
+   })
+    </div>
+
+
     <!-- Canceled Passengers -->
     <h3 class="mt-5">Canceled Passengers</h3>
     <form method="get" class="row g-3 mb-3">
@@ -190,6 +208,23 @@
                     }
                 </tbody>
             </table>
+            <div class="d-flex justify-content-center">
+                @Html.PagedListPager(Model.CanceledList, page => Url.Page("Booking", null, new
+                    {
+                        CanceledPage = page,
+                        SearchTermCanceled = Model.SearchTermCanceled,
+                        FilterDateCanceled = Model.FilterDateCanceled?.ToString("yyyy-MM-dd"),
+                        SearchTermBooked = Model.SearchTermBooked,
+                        FilterDateBooked = Model.FilterDateBooked?.ToString("yyyy-MM-dd"),
+                        BookedPage = Model.BookedPage
+                    }, null), new PagedListRenderOptions
+       {
+           UlElementClasses = new[] { "pagination" },
+           LiElementClasses = new[] { "page-item" },
+           PageClasses = new[] { "page-link" }
+       })
+            </div>
+
         </div>
     }
     else
@@ -197,6 +232,7 @@
         <p>No canceled passengers.</p>
     }
 </div>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

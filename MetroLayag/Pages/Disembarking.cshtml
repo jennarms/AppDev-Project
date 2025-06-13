@@ -12,6 +12,7 @@
         Disembark Passenger
     </h1>
 
+    <!-- Active Bookings -->
     <form method="get" class="row g-3 mb-3">
         <div class="col-md-5">
             <input type="text" name="SearchTerm" class="form-control" placeholder="Search by name or destination" value="@Model.SearchTerm" />
@@ -53,7 +54,22 @@
                 }
             </tbody>
         </table>
-        @Html.PagedListPager(Model.PassengerList, page => Url.Page("/Disembarking", new { ActivePage = page, DisembarkedPage = Model.DisembarkedPage, SearchTerm = Model.SearchTerm, FilterDate = Model.FilterDate?.ToString("yyyy-MM-dd") }), new PagedListRenderOptions { Display = PagedListDisplayMode.IfNeeded })
+
+        <div>
+            @Html.PagedListPager(Model.PassengerList, page => Url.Page("Disembarking", null, new
+                {
+                    ActivePage = page,
+                    DisembarkedPage = Model.DisembarkedPage,
+                    SearchTerm = Model.SearchTerm,
+                    FilterDate = Model.FilterDate?.ToString("yyyy-MM-dd")
+                }, null), new PagedListRenderOptions
+   {
+       UlElementClasses = new[] { "pagination" },
+       LiElementClasses = new[] { "page-item" },
+       PageClasses = new[] { "page-link" }
+   })
+
+        </div>
     }
     else
     {
@@ -62,6 +78,7 @@
 
     <hr />
     <h3>Disembarked History</h3>
+
     <form method="get" class="row g-3 mb-3">
         <div class="col-md-5">
             <input type="text" name="SearchTerm" class="form-control" placeholder="Search by name or destination" value="@Model.SearchTerm" />
@@ -99,7 +116,21 @@
                 }
             </tbody>
         </table>
-        @Html.PagedListPager(Model.DisembarkedList, page => Url.Page("/Disembarking", new { DisembarkedPage = page, ActivePage = Model.ActivePage, SearchTerm = Model.SearchTerm, FilterDate = Model.FilterDate?.ToString("yyyy-MM-dd") }), new PagedListRenderOptions { Display = PagedListDisplayMode.IfNeeded })
+
+        <div>
+            @Html.PagedListPager(Model.DisembarkedList, page => Url.Page("Disembarking", null, new
+                {
+                    DisembarkedPage = page,
+                    ActivePage = Model.ActivePage,
+                    SearchTerm = Model.SearchTerm,
+                    FilterDate = Model.FilterDate?.ToString("yyyy-MM-dd")
+                }, null), new PagedListRenderOptions
+   {
+       UlElementClasses = new[] { "pagination" },
+       LiElementClasses = new[] { "page-item" },
+       PageClasses = new[] { "page-link" }
+   })
+        </div>
     }
     else
     {

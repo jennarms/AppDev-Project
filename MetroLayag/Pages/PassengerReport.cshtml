@@ -18,36 +18,36 @@
     </div>
 
     <form method="get" class="mb-3">
-        <div class="row g-2 align-items-center">
-            <div class="col-auto">
-                <label for="filterDate" class="col-form-label">Filter by Date:</label>
-            </div>
-            <div class="col-auto">
-                <input type="date" name="FilterDate" id="filterDate" class="form-control" value="@Model.FilterDate?.ToString("yyyy-MM-dd")" />
-            </div>
-
-            <div class="col-auto">
-                <label for="station" class="col-form-label">Filter by Station:</label>
-            </div>
-            <div class="col-auto">
-                <select name="SelectedStation" id="station" class="form-select">
-                    <option value="">-- All Stations --</option>
-                    @foreach (var station in Model.Stations)
-                    {
-                        <option value="@station" selected="@(Model.SelectedStation == station ? "selected" : null)">@station</option>
-                    }
-                </select>
-            </div>
-
-            <div class="col-auto">
-                <button type="submit" class="btn" style="background-color: #4e048d; color: white;">Apply</button>
-            </div>
-
-            <div class="col-auto">
-                <a asp-page="/PassengerReport" class="btn btn-secondary">Revert</a>
-            </div>
+    <div class="row g-2 align-items-center">
+        <div class="col-auto">
+            <label for="filterDate" class="col-form-label">Filter by Date:</label>
         </div>
-    </form>
+        <div class="col-auto">
+            <input type="date" name="FilterDate" id="filterDate" class="form-control" value="@Model.FilterDate?.ToString("yyyy-MM-dd")" />
+        </div>
+
+        <div class="col-auto">
+            <label for="station" class="col-form-label">Filter by Station:</label>
+        </div>
+        <div class="col-auto">
+            <select name="SelectedStation" id="station" class="form-select">
+                <option value="">-- All Stations --</option>
+                @foreach (var station in Model.Stations)
+                {
+                    <option value="@station" selected="@(Model.SelectedStation == station ? "selected" : null)">@station</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <button type="submit" class="btn" style="background-color: #4e048d; color: white;">Apply</button>
+        </div>
+
+        <div class="col-auto">
+            <a asp-page="/PassengerReport" class="btn btn-secondary">Revert</a>
+        </div>
+    </div>
+</form>
 
 
 
@@ -82,13 +82,19 @@
                 </tbody>
             </table>
             <div>
-                @Html.PagedListPager(Model.PagedSuccessfulPassengers, page => Url.Page("PassengerReport", new
+                @Html.PagedListPager(Model.PagedSuccessfulPassengers, page => Url.Page("PassengerReport", null, new
                     {
                         PageSuccessful = page,
                         PageCanceled = Model.PageCanceled,
                         FilterDate = Model.FilterDate?.ToString("yyyy-MM-dd"),
                         SelectedStation = Model.SelectedStation
-                    }))
+                    }, null), new PagedListRenderOptions
+       {
+           UlElementClasses = new[] { "pagination" },
+           LiElementClasses = new[] { "page-item" },
+           PageClasses = new[] { "page-link" }
+       })
+
             </div>
         }
         else
@@ -128,13 +134,19 @@
                 </tbody>
             </table>
             <div>
-                @Html.PagedListPager(Model.PagedCanceledPassengers, page => Url.Page("PassengerReport", new
+                @Html.PagedListPager(Model.PagedCanceledPassengers, page => Url.Page("PassengerReport", null, new
                     {
                         PageCanceled = page,
                         PageSuccessful = Model.PageSuccessful,
                         FilterDate = Model.FilterDate?.ToString("yyyy-MM-dd"),
                         SelectedStation = Model.SelectedStation
-                    }))
+                    }, null), new PagedListRenderOptions
+       {
+           UlElementClasses = new[] { "pagination" },
+           LiElementClasses = new[] { "page-item" },
+           PageClasses = new[] { "page-link" }
+       })
+
             </div>
         }
 
