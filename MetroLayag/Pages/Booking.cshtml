@@ -1,7 +1,5 @@
 ﻿@page
 @model MetroLayag.Pages.BookingModel
-@using X.PagedList.Mvc.Core
-@using X.PagedList
 @{
     ViewData["Title"] = "Booking";
 }
@@ -95,70 +93,47 @@
         </div>
     </form>
     <div style="max-height: 100%; overflow-y: auto;">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Gender</th>
-                <th>Age</th>
-                <th>Starting Station</th>
-                <th>Destination</th>
-                <th>Booking Date</th>
-                <th>Disembarked?</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-                @if (Model.PassengerList.Any())
-                {
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Gender</th>
-                                <th>Age</th>
-                                <th>Starting Station</th>
-                                <th>Destination</th>
-                                <th>Booking Date</th>
-                                <th>Disembarked?</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var p in Model.PassengerList)
-                            {
-                                <tr>
-                                    <td>@p.FullName</td>
-                                    <td>@p.Gender</td>
-                                    <td>@p.Age</td>
-                                    <td>@p.StartingStation</td>
-                                    <td>@p.Destination</td>
-                                    <td>@p.BookingDate.ToString("MMM dd, yyyy")</td>
-                                    <td>@(p.HasDisembarked ? "Yes" : "No")</td>
-                                    <td>
-                                        <a asp-page="/EditPassenger" asp-route-id="@p.Id" class="btn btn-sm btn-warning">Edit</a>
-                                        <a asp-page="/CancelPassenger" asp-route-id="@p.Id" class="btn btn-sm btn-danger" onclick="return confirm('Mark this passenger as canceled?')">Cancel</a>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                    @Html.PagedListPager(Model.PassengerList, page => Url.Page("/Booking", new
-                        {
-                            BookedPage = page,
-                            CanceledPage = Model.CanceledPage,
-                            SearchTermBooked = Model.SearchTermBooked,
-                            FilterDateBooked = Model.FilterDateBooked?.ToString("yyyy-MM-dd"),
-                            SearchTermCanceled = Model.SearchTermCanceled,
-                            FilterDateCanceled = Model.FilterDateCanceled?.ToString("yyyy-MM-dd")
-                        }))
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Age</th>
+                    <th>Starting Station</th>
+                    <th>Destination</th>
+                    <th>Booking Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var countBooked = 0;
+                    foreach (var p in Model.PassengerList)
+                    {
+
+                        <tr>
+                            <td>@p.FullName</td>
+                            <td>@p.Gender</td>
+                            <td>@p.Age</td>
+                            <td>@p.StartingStation</td>
+                            <td>@p.Destination</td>
+                            <td>@p.BookingDate.ToString("MMM dd, yyyy")</td>
+                            <td>
+                                <a asp-page="/EditPassenger" asp-route-id="@p.Id" class="btn btn-sm btn-warning">Edit</a>
+                                <a asp-page="/CancelPassenger" asp-route-id="@p.Id" class="btn btn-sm btn-danger" onclick="return confirm('Mark this passenger as canceled?')">Cancel</a>
+                            </td>
+                        </tr>
+                        countBooked++;
+                    }
+                    for (int i = countBooked; i < 10; i++)
+                    {
+                        <tr>
+                            <td colspan="8" style="height: 40px;"></td>
+                        </tr>
+                    }
                 }
-                else
-                {
-                    <p>No active passengers found.</p>
-                }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
     </div>
 
     <!-- Canceled Passengers -->
@@ -178,65 +153,43 @@
     @if (Model.CanceledList.Any())
     {
         <div style="max-height: 100%; overflow-y: auto;">
-        <table class="table table-bordered table-sm">
-            <thead class="table-danger">
-                <tr>
-                    <th>Name</th>
-                    <th>Gender</th>
-                    <th>Age</th>
-                    <th>Starting Station</th>
-                    <th>Destination</th>
-                    <th>Booking Date</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                    @if (Model.CanceledList.Any())
-                    {
-                        <table class="table table-bordered table-sm">
-                            <thead class="table-danger">
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Gender</th>
-                                    <th>Age</th>
-                                    <th>Starting Station</th>
-                                    <th>Destination</th>
-                                    <th>Booking Date</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var p in Model.CanceledList)
-                                {
-                                    <tr class="table-danger">
-                                        <td>@p.FullName</td>
-                                        <td>@p.Gender</td>
-                                        <td>@p.Age</td>
-                                        <td>@p.StartingStation</td>
-                                        <td>@p.Destination</td>
-                                        <td>@p.BookingDate.ToString("MMM dd, yyyy")</td>
-                                        <td>Canceled</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                        @Html.PagedListPager(Model.CanceledList, page => Url.Page("/Booking", new
-                            {
-                                BookedPage = Model.BookedPage,
-                                CanceledPage = page,
-                                SearchTermBooked = Model.SearchTermBooked,
-                                FilterDateBooked = Model.FilterDateBooked?.ToString("yyyy-MM-dd"),
-                                SearchTermCanceled = Model.SearchTermCanceled,
-                                FilterDateCanceled = Model.FilterDateCanceled?.ToString("yyyy-MM-dd")
-                            }))
+            <table class="table table-bordered table-sm">
+                <thead class="table-danger">
+                    <tr>
+                        <th>Name</th>
+                        <th>Gender</th>
+                        <th>Age</th>
+                        <th>Starting Station</th>
+                        <th>Destination</th>
+                        <th>Booking Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var countCanceled = 0;
+                        foreach (var p in Model.CanceledList)
+                        {
+                            <tr class="table-danger">
+                                <td>@p.FullName</td>
+                                <td>@p.Gender</td>
+                                <td>@p.Age</td>
+                                <td>@p.StartingStation</td>
+                                <td>@p.Destination</td>
+                                <td>@p.BookingDate.ToString("MMM dd, yyyy")</td>
+                                <td>Canceled</td>
+                            </tr>
+                            countCanceled++;
+                        }
+                        for (int i = countCanceled; i < 10; i++)
+                        {
+                            <tr class="table-danger">
+                                <td colspan="7" style="height: 40px;"></td>
+                            </tr>
+                        }
                     }
-                    else
-                    {
-                        <p>No canceled passengers found.</p>
-                    }
-
-            </tbody>
-        </table>
+                </tbody>
+            </table>
         </div>
     }
     else
