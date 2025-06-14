@@ -1,0 +1,31 @@
+﻿@model List<MetroLayag.Models.Passenger>
+@{
+    Layout = null;
+}
+
+<h2>Passenger Report</h2>
+<table border="1" cellpadding="5" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Age</th>
+            <th>Starting Station</th>
+            <th>Destination</th>
+            <th>Booking Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.FullName</td>
+                <td>@p.Gender</td>
+                <td>@p.Age</td>
+                <td>@p.StartingStation</td>
+                <td>@p.Destination</td>
+                <td>@p.BookingDate.ToString("MMM dd, yyyy")</td>
+            </tr>
+        }
+    </tbody>
+</table>

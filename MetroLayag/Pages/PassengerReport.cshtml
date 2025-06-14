@@ -47,8 +47,26 @@
             <a asp-page="/PassengerReport" class="btn btn-secondary">Revert</a>
         </div>
     </div>
-</form>
+        <div class="col-auto mt-3">
+            <a class="btn btn-success"
+               asp-controller="Export"
+               asp-action="SuccessfulPdf"
+               asp-route-filterDate="@Model.FilterDate?.ToString("yyyy-MM-dd")"
+               asp-route-selectedStation="@Model.SelectedStation"
+               target="_blank">
+                Export Successful
+            </a>
 
+            <a class="btn btn-danger"
+               asp-controller="Export"
+               asp-action="CanceledPdf"
+               asp-route-filterDate="@Model.FilterDate?.ToString("yyyy-MM-dd")"
+               asp-route-selectedStation="@Model.SelectedStation"
+               target="_blank">
+                Export Canceled
+            </a>
+        </div
+</form>
 
 
     <!-- Successful Trips Section -->
