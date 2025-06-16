@@ -1,0 +1,42 @@
+﻿@page
+@model MetroLayag.Pages.ManageStationModel
+@{
+    ViewData["Title"] = "Manage Station";
+}
+<h1 class="mt-5 mb-4 px-4 py-3 text-white flex items-center gap-3" style="background-color: #4e048d; border-radius: 10px;">
+    <img src="~/appdevAssets/Group.png" alt="Logo" width="50" height="50" />
+    Manage Station Accounts
+</h1>
+
+<table class="table-auto w-full border border-collapse mb-6">
+    <thead class="bg-gray-200">
+        <tr>
+            <th class="border px-4 py-2">Station</th>
+            <th class="border px-4 py-2">Username</th>
+            <th class="border px-4 py-2">Password</th>
+            <th class="border px-4 py-2">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <form method="post" asp-page-handler="Edit">
+                    <input type="hidden" name="EditUser.Id" value="@user.Id" />
+                    <input type="hidden" name="EditUser.Station" value="@user.Station" />
+                <td class="border px-4 py-2">@user.Station</td>
+                <td class="border px-4 py-2">
+                    <input name="EditUser.Username" class="border p-1 w-full" value="@user.Username" />
+                </td>
+                <td class="border px-4 py-2">
+                    <input name="EditUser.Password" class="border p-1 w-full" type="password" placeholder="••••••" />
+                </td>
+                <td class="border px-4 py-2">
+                    <button type="submit" style="background-color: #4e048d; color: white;">Save</button>
+                </td>
+                </form>
+            </tr>
+        }
+    </tbody>
+</table>
+
