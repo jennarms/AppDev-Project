@@ -50,21 +50,12 @@ namespace MetroLayag.Pages
             if (HttpContext.Session.GetString("IsLoggedIn") != "true")
                 return RedirectToPage("/Login");
 
-            if (HttpContext.Session.GetString("UserRole") != "StationAdmin")
-                return RedirectToPage("/AccessDenied");
-
             LoadPassengerLists();
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (HttpContext.Session.GetString("IsLoggedIn") != "true")
-                return RedirectToPage("/Login");
-
-            if (HttpContext.Session.GetString("UserRole") != "StationAdmin")
-                return RedirectToPage("/AccessDenied");
-
             if (!ModelState.IsValid)
             {
                 LoadPassengerLists(); // Show validation errors with current data
