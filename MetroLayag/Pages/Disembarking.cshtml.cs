@@ -42,6 +42,10 @@ namespace MetroLayag.Pages
             if (HttpContext.Session.GetString("IsLoggedIn") != "true")
                 return RedirectToPage("/Login");
 
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "StationAdmin")
+                return RedirectToPage("/AccessDenied");
+
             // Active passengers
             var activeQuery = _context.Passengers
                 .Where(p => !p.HasDisembarked && !p.IsCanceled);
@@ -89,6 +93,10 @@ namespace MetroLayag.Pages
 
         public async Task<IActionResult> OnPostMarkDisembarkedAsync(int id)
         {
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "StationAdmin")
+                return RedirectToPage("/AccessDenied");
+
             var passenger = await _context.Passengers.FindAsync(id);
             if (passenger != null)
             {

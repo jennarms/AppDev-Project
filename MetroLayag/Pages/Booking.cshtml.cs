@@ -50,6 +50,10 @@ namespace MetroLayag.Pages
             if (HttpContext.Session.GetString("IsLoggedIn") != "true")
                 return RedirectToPage("/Login");
 
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "StationAdmin")
+                return RedirectToPage("/AccessDenied");
+
             LoadPassengerLists();
             return Page();
         }
