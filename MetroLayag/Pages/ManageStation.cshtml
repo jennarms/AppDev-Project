@@ -32,7 +32,9 @@
                     <input name="EditUser.Password" class="border p-1 w-full" type="password" placeholder="••••••" />
                 </td>
                 <td class="border px-4 py-2">
-                    <button type="submit" style="background-color: #4e048d; color: white;">Save</button>
+                    <button type="submit" class="btn" style="background-color: #4e048d; color: white;" onclick="return confirm('Are you sure you want to save the changes?')">
+                        Save
+                    </button>
                 </td>
                 </form>
             </tr>
