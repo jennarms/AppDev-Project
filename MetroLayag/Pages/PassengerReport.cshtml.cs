@@ -40,8 +40,16 @@ namespace MetroLayag.Pages
         public IPagedList<Passenger> PagedSuccessfulPassengers { get; set; }
         public IPagedList<Passenger> PagedCanceledPassengers { get; set; }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            var isLoggedIn = HttpContext.Session.GetString("IsLoggedIn") == "true";
+            var role = HttpContext.Session.GetString("Role");
+
+            if (!isLoggedIn || (role != "MainAdmin" && role != "StationAdmin"))
+            {
+                return RedirectToPage("/AccessDenied");
+            }
+
             var passengers = _context.Passengers.AsQueryable();
 
             if (FilterDate.HasValue)
@@ -65,6 +73,8 @@ namespace MetroLayag.Pages
                 .Where(p => p.IsCanceled)
                 .OrderByDescending(p => p.BookingDate)
                 .ToPagedList(PageCanceled, 10);
+
+            return Page();
         }
     }
 }
