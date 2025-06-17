@@ -1,8 +1,11 @@
 ﻿@page
 @model MetroLayag.Pages.PassengerReportModel
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 @{
     ViewData["Title"] = "Passenger Reports";
     Layout = "_Layout";
+    var role = HttpContextAccessor.HttpContext.Session.GetString("Role");
 }
 
 <div class="container mt-4">
