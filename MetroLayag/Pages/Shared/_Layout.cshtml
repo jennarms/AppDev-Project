@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var role = HttpContextAccessor.HttpContext.Session.GetString("Role");
+    var isLoggedIn = HttpContextAccessor.HttpContext.Session.GetString("IsLoggedIn");
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -25,32 +33,65 @@
 
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-page="/Booking"><img src="~/appdevAssets/Booking_Icon.png" alt="Logo" width="35" height="35" class="me-2" />Booking</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-page="/Disembarking"><img src="~/appdevAssets/Disembark_Icon.png" alt="Logo" width="35" height="35" class="me-2" />Disembarking</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-page="/PassengerReport"><img src="~/appdevAssets/Passengers_Icon.png" alt="Logo" width="35" height="35" class="me-2" />Passenger Report</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-page="/ManageStation"><img src="~/appdevAssets/Group.png" alt="Logo" width="35" height="35" class="me-2" />Manage Station Accounts</a>
-                        </li>
+                        @if (isLoggedIn == "true")
+                        {
+                            if (role == "StationAdmin")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-page="/Booking">
+                                        <img src="~/appdevAssets/Booking_Icon.png" alt="Booking" width="35" height="35" class="me-2" />
+                                        Booking
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-page="/Disembarking">
+                                        <img src="~/appdevAssets/Disembark_Icon.png" alt="Disembarking" width="35" height="35" class="me-2" />
+                                        Disembarking
+                                    </a>
+                                </li>
+                            }
 
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/PassengerReport">
+                                    <img src="~/appdevAssets/Passengers_Icon.png" alt="Passenger Report" width="35" height="35" class="me-2" />
+                                    Passenger Report
+                                </a>
+                            </li>
 
+                            @if (role == "MainAdmin")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-page="/ManageStation">
+                                        <img src="~/appdevAssets/Group.png" alt="Manage Station" width="35" height="35" class="me-2" />
+                                        Manage Station Accounts
+                                    </a>
+                                </li>
+                            }
+                        }
                     </ul>
                     <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-page="/EditAccount">
-                                <img src="~/appdevAssets/Profile_Icon.png" alt="Logout" width="24" height="24" />
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-page="/Logout" onclick="return confirm('Are you sure you want to log out?')">
-                                <img src="~/appdevAssets/Logout_Icon.png" alt="Logout" width="24" height="24" />
-                            </a>
-                        </li>
+                        @if (isLoggedIn == "true")
+                        {
+                            @if (role == "MainAdmin")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-page="/EditAccount">
+                                        <img src="~/appdevAssets/Profile_Icon.png" alt="Edit Account" width="24" height="24" />
+                                    </a>
+                                </li>
+                            }
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Logout" onclick="return confirm('Are you sure you want to log out?')">
+                                    <img src="~/appdevAssets/Logout_Icon.png" alt="Logout" width="24" height="24" />
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Login">Login</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

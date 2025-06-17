@@ -64,7 +64,7 @@ namespace MetroLayag.Pages
 
             if (user.Role == "MainAdmin")
             {
-                return RedirectToPage("/ManageStation");
+                return RedirectToPage("/Index");
             }
             else if (user.Role == "StationAdmin")
             {
