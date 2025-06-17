@@ -4,6 +4,7 @@ using MetroLayag.Data;
 using MetroLayag.Models;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace MetroLayag.Pages
 {
@@ -21,16 +22,32 @@ namespace MetroLayag.Pages
         [BindProperty]
         public User EditUser { get; set; }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            if (HttpContext.Session.GetString("IsLoggedIn") != "true")
+                return RedirectToPage("/Login");
+
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "MainAdmin")
+                return RedirectToPage("/AccessDenied");
+
             Users = _context.Users
                 .Where(u => u.Role == "StationAdmin")
                 .OrderBy(u => u.Station)
                 .ToList();
+
+            return Page();
         }
 
         public IActionResult OnPostEdit()
         {
+            if (HttpContext.Session.GetString("IsLoggedIn") != "true")
+                return RedirectToPage("/Login");
+
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "MainAdmin")
+                return RedirectToPage("/AccessDenied");
+
             var user = _context.Users.FirstOrDefault(u => u.Id == EditUser.Id);
             if (user == null) return RedirectToPage();
 

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MetroLayag.Data;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace MetroLayag.Pages
 {
@@ -25,53 +26,57 @@ namespace MetroLayag.Pages
 
         public IActionResult OnGet()
         {
+            if (HttpContext.Session.GetString("IsLoggedIn") != "true")
+                return RedirectToPage("/Login");
+
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "MainAdmin")
+                return RedirectToPage("/AccessDenied");
+
             var userId = HttpContext.Session.GetInt32("UserId");
-            if (userId == null)
-            {
-                ErrorMessage = "User not found in session.";
-                return RedirectToPage("/Login");
-            }
-
             var user = _context.Users.FirstOrDefault(u => u.Id == userId);
-            if (user == null)
+
+            if (user != null)
             {
-                ErrorMessage = "User does not exist.";
-                return RedirectToPage("/Login");
+                Username = user.Username;
             }
 
-            Username = user.Username;
             return Page();
         }
 
         public IActionResult OnPost()
         {
+            if (HttpContext.Session.GetString("IsLoggedIn") != "true")
+                return RedirectToPage("/Login");
+
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "MainAdmin")
+                return RedirectToPage("/AccessDenied");
+
             var userId = HttpContext.Session.GetInt32("UserId");
-            if (userId == null)
-            {
-                ErrorMessage = "User not found in session.";
-                return RedirectToPage("/Login");
-            }
-
             var user = _context.Users.FirstOrDefault(u => u.Id == userId);
-            if (user == null)
+
+            if (user != null)
             {
-                ErrorMessage = "User does not exist.";
-                return RedirectToPage("/Login");
+                if (!string.IsNullOrWhiteSpace(Username))
+                {
+                    user.Username = Username;
+                    HttpContext.Session.SetString("Username", Username);
+                }
+
+                if (!string.IsNullOrWhiteSpace(Password))
+                {
+                    user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(Password);
+                }
+
+                _context.SaveChanges();
+                SuccessMessage = "Account updated successfully.";
+            }
+            else
+            {
+                ErrorMessage = "User not found.";
             }
 
-            if (!string.IsNullOrWhiteSpace(Username))
-            {
-                user.Username = Username;
-                HttpContext.Session.SetString("Username", Username);
-            }
-
-            if (!string.IsNullOrWhiteSpace(Password))
-            {
-                user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(Password);
-            }
-
-            _context.SaveChanges();
-            SuccessMessage = "Account updated successfully.";
             return Page();
         }
     }
