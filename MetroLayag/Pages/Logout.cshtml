@@ -1,4 +1,7 @@
 ﻿@page
 @model MetroLayag.Pages.LogoutModel
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 @{
+    var role = HttpContextAccessor.HttpContext.Session.GetString("Role");
 }
