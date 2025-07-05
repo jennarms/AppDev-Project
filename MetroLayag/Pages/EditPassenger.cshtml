@@ -2,19 +2,21 @@
 @model MetroLayag.Pages.EditPassengerModel
 @using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor HttpContextAccessor
+
 @{
     ViewData["Title"] = "Edit Passenger";
-    var role = HttpContextAccessor.HttpContext.Session.GetString("Role");
 }
 
 <h2>Edit Passenger</h2>
 
 <form method="post">
     <input type="hidden" asp-for="Passenger.Id" />
+
     <div class="mb-3">
         <label class="form-label">Full Name</label>
         <input asp-for="Passenger.FullName" class="form-control" />
     </div>
+
     <div class="mb-3">
         <label class="form-label">Gender</label>
         <select asp-for="Passenger.Gender" class="form-select">
@@ -22,46 +24,32 @@
             <option>Female</option>
         </select>
     </div>
+
     <div class="mb-3">
         <label class="form-label">Age</label>
         <input asp-for="Passenger.Age" class="form-control" />
     </div>
+
     <div class="mb-3">
         <label class="form-label">Starting Station</label>
-        <select asp-for="Passenger.StartingStation" class="form-select">
-            <option>Escolta</option>
-            <option>Lawton</option>
-            <option>Quinta</option>
-            <option>PUP</option>
-            <option>Sta. Ana</option>
-            <option>Lambingan</option>
-            <option>Valenzuela</option>
-            <option>Hulo</option>
-            <option>Guadalupe</option>
-            <option>Maybunga</option>
-            <option>San Joaquin</option>
-            <option>Kalawaan</option>
-            <option>Pinagbuhatan</option>
+        <select asp-for="Passenger.StartingStation" class="form-select" disabled>
+            <option selected>@Model.UserStation</option>
         </select>
+        <input type="hidden" asp-for="Passenger.StartingStation" value="@Model.UserStation" />
     </div>
+
     <div class="mb-3">
         <label class="form-label">Destination</label>
         <select asp-for="Passenger.Destination" class="form-select">
-            <option>Escolta</option>
-            <option>Lawton</option>
-            <option>Quinta</option>
-            <option>PUP</option>
-            <option>Sta. Ana</option>
-            <option>Lambingan</option>
-            <option>Valenzuela</option>
-            <option>Hulo</option>
-            <option>Guadalupe</option>
-            <option>Maybunga</option>
-            <option>San Joaquin</option>
-            <option>Kalawaan</option>
-            <option>Pinagbuhatan</option>
+            @foreach (var station in Model.OtherStations)
+            {
+                <option value="@station" selected="@(station == Model.Passenger.Destination ? "selected" : null)">
+                    @station
+                </option>
+            }
         </select>
     </div>
+
     <button type="submit" class="btn btn-success">Save</button>
     <a asp-page="/Booking" class="btn btn-secondary">Cancel</a>
 </form>
