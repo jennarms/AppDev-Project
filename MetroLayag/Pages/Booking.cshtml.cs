@@ -45,6 +45,8 @@ namespace MetroLayag.Pages
         [BindProperty(SupportsGet = true)]
         public int CanceledPage { get; set; } = 1;
 
+        public List<string> DestinationOptions { get; set; } = new List<string>();
+
         public async Task<IActionResult> OnGetAsync()
         {
             if (HttpContext.Session.GetString("IsLoggedIn") != "true")
@@ -54,19 +56,39 @@ namespace MetroLayag.Pages
             if (role != "StationAdmin")
                 return RedirectToPage("/AccessDenied");
 
+            var station = HttpContext.Session.GetString("Station");
+
+            Passenger = new Passenger
+            {
+                StartingStation = station
+            };
+
+            DestinationOptions = GetAllStations()
+                .Where(s => s != station)
+                .ToList();
+
             LoadPassengerLists();
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            if (HttpContext.Session.GetString("IsLoggedIn") != "true")
+                return RedirectToPage("/Login");
+
+            var station = HttpContext.Session.GetString("Station");
+
             if (!ModelState.IsValid)
             {
-                LoadPassengerLists(); // Show validation errors with current data
+                Passenger.StartingStation = station;
+                DestinationOptions = GetAllStations().Where(s => s != station).ToList();
+                LoadPassengerLists();
                 return Page();
             }
 
+            Passenger.StartingStation = station;
             Passenger.BookingDate = DateTime.Now;
+
             _context.Passengers.Add(Passenger);
             await _context.SaveChangesAsync();
 
@@ -77,7 +99,6 @@ namespace MetroLayag.Pages
         {
             const int pageSize = 10;
 
-            // Active passengers
             var activeQuery = _context.Passengers
                 .Where(p => !p.HasDisembarked && !p.IsCanceled);
 
@@ -98,7 +119,6 @@ namespace MetroLayag.Pages
                 .OrderByDescending(p => p.BookingDate)
                 .ToPagedList(BookedPage, pageSize);
 
-            // Canceled passengers
             var canceledQuery = _context.Passengers.Where(p => p.IsCanceled);
 
             if (!string.IsNullOrWhiteSpace(SearchTermCanceled))
@@ -117,6 +137,16 @@ namespace MetroLayag.Pages
             CanceledList = canceledQuery
                 .OrderByDescending(p => p.BookingDate)
                 .ToPagedList(CanceledPage, pageSize);
+        }
+
+        private List<string> GetAllStations()
+        {
+            return new List<string>
+            {
+                "Escolta", "Lawton", "Quinta", "PUP", "Sta. Ana", "Lambingan",
+                "Valenzuela", "Hulo", "Guadalupe", "Maybunga",
+                "San Joaquin", "Kalawaan", "Pinagbuhatan"
+            };
         }
     }
 }

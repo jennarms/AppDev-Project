@@ -38,43 +38,22 @@
 
         <div class="mb-3">
             <label asp-for="Passenger.StartingStation" class="form-label">Starting Station</label>
-            <select asp-for="Passenger.StartingStation" class="form-select">
-                <option>Escolta</option>
-                <option>Lawton</option>
-                <option>Quinta</option>
-                <option>PUP</option>
-                <option>Sta. Ana</option>
-                <option>Lambingan</option>
-                <option>Valenzuela</option>
-                <option>Hulo</option>
-                <option>Guadalupe</option>
-                <option>Maybunga</option>
-                <option>San Joaquin</option>
-                <option>Kalawaan</option>
-                <option>Pinagbuhatan</option>
-            </select>
+            <input asp-for="Passenger.StartingStation" class="form-control" readonly />
             <span asp-validation-for="Passenger.StartingStation" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label asp-for="Passenger.Destination" class="form-label">Destination</label>
             <select asp-for="Passenger.Destination" class="form-select">
-                <option>Escolta</option>
-                <option>Lawton</option>
-                <option>Quinta</option>
-                <option>PUP</option>
-                <option>Sta. Ana</option>
-                <option>Lambingan</option>
-                <option>Valenzuela</option>
-                <option>Hulo</option>
-                <option>Guadalupe</option>
-                <option>Maybunga</option>
-                <option>San Joaquin</option>
-                <option>Kalawaan</option>
-                <option>Pinagbuhatan</option>
+                <option value="">-- Select Destination --</option>
+                @foreach (var station in Model.DestinationOptions)
+                {
+                    <option value="@station">@station</option>
+                }
             </select>
             <span asp-validation-for="Passenger.Destination" class="text-danger"></span>
         </div>
+
 
         <button type="submit" class="btn" style="background-color: #4e048d; color: white;">Add Passenger</button>
     </form>
